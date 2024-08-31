@@ -1,7 +1,7 @@
 defmodule Api do
 
-  @spec get_jobs() :: any()
-  def get_jobs() do
+  def main(args) do
+    IO.inspect args
     Remotejobs.get()
     |> show_result
   end

@@ -14,7 +14,12 @@ defmodule Remotejobs do
   end
 
   defp build_url(%{count: count, geo: geo, industry: industry, tag: tag}) do
-    "#{@base_url}?count=#{count}&geo=#{geo}&industry=#{industry}&tag=#{tag}"
+    url = "#{@base_url}?count=#{count}&geo=#{geo}"
+    
+    url =
+      if industry != "", do: "#{url}&industry=#{industry}", else: url
+    
+    if tag != "", do: "#{url}&tag=#{tag}", else: url
   end
 
   defp process_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do

@@ -22,16 +22,18 @@ defmodule Api do
   end
 
   defp get_filters do
-    IO.puts("Enter job count (example:, 5):")
-    count = IO.gets("") |> String.trim() |> String.to_integer()
+    IO.puts("Enter job count (example: 5):")
+    count = IO.gets("") |> String.trim()
+    count = if count == "", do: 10, else: String.to_integer(count)
 
-    IO.puts("Enter search region (example:, usa, brazil, uk, europe, canada):")
+    IO.puts("Enter search region (example: usa, brazil):")
     geo = IO.gets("") |> String.trim()
+    geo = if geo == "", do: "brazil", else: geo
 
-    IO.puts("Enter job industry (example:, supporting, dev, management):")
+    IO.puts("Enter job industry (example: dev) or press Enter to skip:")
     industry = IO.gets("") |> String.trim()
 
-    IO.puts("Enter job tag (example:., python, react, marketing):")
+    IO.puts("Enter job tag (example: python) or press Enter to skip:")
     tag = IO.gets("") |> String.trim()
 
     %{

@@ -1,19 +1,29 @@
 defmodule Remotejobs do
-  @url "https://jobicy.com/api/v2/remote-jobs?count=20&geo=brazil"
+  @base_url "https://jobicy.com/api/v2/remote-jobs"
 
-  def get do
-    HTTPoison.get(@url)
-    |> process_response
+  def get_recent do
+    url = "#{@base_url}?count=20&geo=brazil"
+    HTTPoison.get(url)
+    |> process_response()
   end
 
-  defp process_response({ :ok, %HTTPoison.Response{ status_code: 200, body: b}}) do
-    { :ok, b}
+  def get(filters) do
+    url = build_url(filters)
+    HTTPoison.get(url)
+    |> process_response()
   end
 
-  defp process_response({ :error, r}), do: { :error, r}
-
-  defp process_response({ :ok, %HTTPoison.Response{ status_code: _, body: b}}) do
-    { :error, b}
+  defp build_url(%{count: count, geo: geo, industry: industry, tag: tag}) do
+    "#{@base_url}?count=#{count}&geo=#{geo}&industry=#{industry}&tag=#{tag}"
   end
 
+  defp process_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
+    {:ok, body}
+  end
+
+  defp process_response({:error, reason}), do: {:error, reason}
+
+  defp process_response({:ok, %HTTPoison.Response{status_code: _, body: body}}) do
+    {:error, body}
+  end
 end
